@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motors Hut — Premium Car Marketplace</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Lora:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── Tokens ── */
+        :root {
+            --accent:        #4f46e5;
+            --accent-deep:   #3730a3;
+            --accent-mid:    #6366f1;
+            --accent-light:  #eff0fe;
+            --accent-border: #c7d2fe;
+            --grad:          linear-gradient(90deg, #4f46e5, #7c3aed, #a855f7, #ec4899, #f97316);
+            --grad2:         linear-gradient(135deg, #4f46e5, #7c3aed);
+            --bg:            #ffffff;
+            --surface:       #ffffff;
+            --surface2:      #f9fafb;
+            --border:        #e5e7eb;
+            --border2:       #f3f4f6;
+            --text:          #111827;
+            --text-soft:     #374151;
+            --muted:         #6b7280;
+            --green:         #059669;
+            --nav-h:         66px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* ══ NAVBAR ══ */
+        .mh-nav {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+        }
+
+        .mh-nav::before {
+            content: '';
+            display: block;
+            height: 4px;
+            background: var(--grad);
+            background-size: 300% 100%;
+            animation: gradShift 6s linear infinite;
+        }
+
+        @keyframes gradShift {
+            0%   { background-position: 0%   50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .mh-nav__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--nav-h);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            gap: 1.5rem;
+        }
+
+        .mh-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .mh-brand__icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+            flex-shrink: 0;
+        }
+
+        .mh-brand__icon svg { width: 20px; height: 20px; color: #fff; }
+
+        .mh-brand__text {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #111827;
+            letter-spacing: 0.01em;
+        }
+
+        .mh-nav__links {
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+            list-style: none;
+            margin: 0; padding: 0;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .mh-nav__link {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #374151;
+            text-decoration: none;
+            padding: 0.48rem 1rem;
+            border-radius: 8px;
+            transition: color 0.18s, background 0.18s;
+            white-space: nowrap;
+        }
+
+        .mh-nav__link:hover, .mh-nav__link.active {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .mh-nav__right {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .mh-nav__pill {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #374151;
+            text-decoration: none;
+            padding: 0.48rem 1.1rem;
+            border-radius: 8px;
+            border: 2px solid #d1d5db;
+            background: #ffffff;
+            transition: color 0.18s, border-color 0.18s, background 0.18s;
+            white-space: nowrap;
+        }
+
+        .mh-nav__pill:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .mh-nav__toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: #fff;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 7px 8px;
+            width: 38px; height: 38px;
+        }
+
+        .mh-nav__toggle:hover { border-color: var(--accent); background: var(--accent-light); }
+
+        .mh-nav__toggle span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: #374151;
+            border-radius: 2px;
+            transition: all 0.25s;
+        }
+
+        .mh-nav__drawer {
+            display: none;
+            position: fixed;
+            top: calc(var(--nav-h) + 4px);
+            left: 0; right: 0;
+            background: #ffffff;
+            border-bottom: 2px solid var(--border);
+            padding: 0.8rem 1.6rem 1.6rem;
+            z-index: 199;
+            flex-direction: column;
+            gap: 0.1rem;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+        }
+
+        .mh-nav__drawer.open { display: flex; }
+
+        .mh-nav__drawer .mh-nav__link {
+            display: block;
+            padding: 0.75rem 0.5rem;
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #111827;
+            border-bottom: 1px solid #f3f4f6;
+            border-radius: 0;
+        }
+
+        .mh-nav__drawer .mh-nav__link:last-of-type { border-bottom: none; }
+
+        .mh-nav__drawer-btns {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        .mh-nav__drawer-btns .mh-nav__pill {
+            flex: 1;
+            text-align: center;
+            padding: 0.7rem;
+        }
+
+        /* ══ HERO ══ */
+        .idx-hero {
+            position: relative;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            background: #080c18;
+        }
+
+        .idx-hero__bg {
+            position: absolute; inset: 0;
+            background: url("https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+            opacity: 0.38;
+            animation: bgZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+        .idx-hero__vignette {
+            position: absolute; inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(8,12,24,0.65) 0%, rgba(8,12,24,0.05) 40%, rgba(8,12,24,0.92) 100%),
+                radial-gradient(ellipse at 18% 28%, rgba(79,70,229,0.2) 0%, transparent 52%);
+        }
+
+        .idx-hero__cut {
+            position: absolute; bottom: -2px; left: 0; right: 0;
+            height: 90px; background: #ffffff;
+            clip-path: polygon(0 60%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .idx-hero__inner {
+            position: relative; z-index: 2;
+            padding: 0 5vw 5.5rem;
+            max-width: 1300px; margin: 0 auto; width: 100%;
+        }
+
+        .idx-chip {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.22);
+            padding: 0.4rem 1rem; border-radius: 999px;
+            font-size: 0.82rem; font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 1.4rem; letter-spacing: 0.04em;
+            backdrop-filter: blur(6px);
+        }
+
+        .idx-chip__dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: #34d399; box-shadow: 0 0 0 5px rgba(52,211,153,0.22);
+            animation: dotPulse 2s ease infinite;
+        }
+
+        @keyframes dotPulse {
+            0%,100% { box-shadow: 0 0 0 5px rgba(52,211,153,0.22); }
+            50%      { box-shadow: 0 0 0 10px rgba(52,211,153,0.06); }
+        }
+
+        .idx-hero__h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: clamp(3.8rem, 9vw, 8.5rem);
+            font-weight: 800; line-height: 0.93;
+            letter-spacing: -0.025em; color: #fff; margin-bottom: 1.3rem;
+        }
+
+        .idx-hero__h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, #a5b4fc, #c4b5fd, #ffffff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .idx-hero__sub {
+            color: rgba(255,255,255,0.76); font-size: 1.05rem; font-weight: 500;
+            max-width: 520px; line-height: 1.7; margin-bottom: 2.2rem;
+        }
+
+        .idx-hero__btns { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 3.4rem; }
+
+        .idx-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Nunito', sans-serif; font-weight: 800;
+            font-size: 0.93rem; letter-spacing: 0.01em;
+            padding: 0.78rem 1.5rem; border-radius: 10px;
+            text-decoration: none; transition: all 0.2s;
+            border: none; cursor: pointer; white-space: nowrap;
+        }
+
+        .idx-btn--primary {
+            background: var(--grad2); color: #fff;
+            box-shadow: 0 6px 22px rgba(79,70,229,0.4);
+        }
+        .idx-btn--primary:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(79,70,229,0.5); color: #fff; }
+        .idx-btn--primary svg { transition: transform 0.2s; }
+        .idx-btn--primary:hover svg { transform: translateX(4px); }
+
+        .idx-btn--ghost {
+            background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9);
+            border: 1.5px solid rgba(255,255,255,0.22); backdrop-filter: blur(4px);
+        }
+        .idx-btn--ghost:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+        .idx-btn--outline {
+            background: #fff; color: var(--accent); border: 2px solid var(--accent);
+        }
+        .idx-btn--outline:hover { background: var(--accent-light); color: var(--accent-deep); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(79,70,229,0.15); }
+
+        .idx-stats { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+
+        .idx-stat strong {
+            font-size: 2.5rem; font-weight: 800;
+            color: #fff; display: block; line-height: 1; letter-spacing: -0.02em;
+        }
+
+        .idx-stat span { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+        .idx-stat-sep { width: 1px; height: 42px; background: rgba(255,255,255,0.18); }
+
+        .idx-floats {
+            position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
+            z-index: 2; display: flex; flex-direction: column; gap: 0.8rem;
+        }
+
+        .idx-float {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(14px); color: rgba(255,255,255,0.95);
+            font-weight: 700; font-size: 0.87rem; padding: 0.65rem 1.1rem;
+            border-radius: 12px; animation: floatBob 4s ease-in-out infinite; white-space: nowrap;
+        }
+        .idx-float:nth-child(2) { animation-delay: 1.2s; }
+        .idx-float:nth-child(3) { animation-delay: 2.4s; }
+
+        @keyframes floatBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+
+        /* ══ MARQUEE ══ */
+        .idx-marquee-wrap {
+            background: var(--surface2); border-top: 1.5px solid var(--border);
+            border-bottom: 1.5px solid var(--border); overflow: hidden; padding: 0.9rem 0;
+        }
+
+        .idx-marquee {
+            display: flex; gap: 2.2rem; width: max-content;
+            animation: marquee 30s linear infinite; white-space: nowrap; align-items: center;
+        }
+
+        .idx-marquee span { font-size: 0.82rem; font-weight: 700; color: #374151; letter-spacing: 0.07em; text-transform: uppercase; }
+        .idx-marquee .idx-sep { color: var(--accent-mid); font-size: 0.6rem; }
+
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* ══ SECTIONS ══ */
+        .idx-section { padding: 6rem 0 4rem; background: var(--bg); }
+        .idx-section__inner { max-width: 1300px; margin: 0 auto; padding: 0 5vw; }
+        .idx-section__head { margin-bottom: 2.8rem; }
+
+        .idx-section__head h2 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 800;
+            color: #111827; line-height: 1.05; margin: 0.4rem 0 0.65rem; letter-spacing: -0.02em;
+        }
+
+        .idx-section__head p { color: var(--muted); font-size: 1rem; max-width: 500px; font-weight: 500; }
+
+        .idx-label {
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--accent-mid);
+            display: inline-flex; align-items: center; gap: 0.4rem;
+        }
+
+        .idx-label::before { content: ''; width: 18px; height: 2.5px; background: var(--grad2); border-radius: 2px; display: inline-block; }
+
+        /* ══ CAR GRID ══ */
+        .idx-car-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.3rem; }
+
+        .idx-car {
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-radius: 18px; overflow: hidden;
+            transition: transform 0.28s, box-shadow 0.28s, border-color 0.28s;
+        }
+
+        .idx-car:hover { transform: translateY(-7px); border-color: var(--accent-border); box-shadow: 0 20px 48px rgba(79,70,229,0.12); }
+
+        .idx-car__img-wrap { position: relative; overflow: hidden; height: 210px; }
+        .idx-car__img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .idx-car:hover .idx-car__img-wrap img { transform: scale(1.06); }
+
+        .idx-car__badge {
+            position: absolute; top: 0.75rem; left: 0.75rem;
+            background: var(--accent); color: #fff;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 0.25rem 0.65rem; border-radius: 6px;
+        }
+        .idx-car__badge--ev { background: var(--green); }
+
+        .idx-car__overlay {
+            position: absolute; inset: 0; background: rgba(10,12,30,0.52);
+            display: grid; place-items: center; opacity: 0; transition: opacity 0.25s;
+        }
+        .idx-car:hover .idx-car__overlay { opacity: 1; }
+
+        .idx-car__view {
+            color: #fff; font-weight: 700; font-size: 0.88rem; text-decoration: none;
+            padding: 0.55rem 1.2rem; border: 1.5px solid rgba(255,255,255,0.6);
+            border-radius: 9px; backdrop-filter: blur(4px); transition: background 0.2s;
+        }
+        .idx-car__view:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+        .idx-car__body { padding: 1.15rem 1.1rem; }
+
+        .idx-car__tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 0.65rem; }
+        .idx-car__tags span { font-size: 0.72rem; font-weight: 700; padding: 0.22rem 0.6rem; border-radius: 6px; background: var(--accent-light); color: var(--accent); letter-spacing: 0.03em; }
+        .idx-car__tags span.ev { background: rgba(16,185,129,0.1); color: #059669; }
+
+        .idx-car__body h3 {
+            font-size: 1.18rem; font-weight: 800;
+            color: #111827; margin: 0 0 0.4rem; letter-spacing: -0.01em;
+        }
+
+        .idx-car__body p { font-size: 0.875rem; color: var(--muted); line-height: 1.55; margin-bottom: 0.9rem; min-height: 42px; font-weight: 500; }
+
+        .idx-car__footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 0.75rem; border-top: 1.5px solid var(--border2);
+        }
+
+        .idx-car__price {
+            font-size: 1.35rem; font-weight: 800;
+            color: #111827; letter-spacing: -0.01em;
+        }
+
+        .idx-car__cta {
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+            color: var(--accent); text-decoration: none; padding: 0.42rem 0.9rem;
+            border: 2px solid var(--accent); border-radius: 8px; transition: background 0.2s, color 0.2s;
+        }
+        .idx-car__cta:hover { background: var(--accent); color: #fff; }
+
+        .idx-see-all { text-align: center; margin-top: 3rem; }
+
+        /* ══ ABOUT ══ */
+        .idx-about { background: var(--surface2); border-top: 1.5px solid var(--border); border-bottom: 1.5px solid var(--border); }
+        .idx-about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5rem; align-items: center; }
+
+        .idx-about__visual {
+            position: relative; border-radius: 22px; overflow: hidden;
+            height: 480px; border: 1.5px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.07);
+        }
+        .idx-about__visual img { width: 100%; height: 100%; object-fit: cover; }
+
+        .idx-about__badge {
+            position: absolute; bottom: 1.5rem; left: 1.5rem;
+            background: rgba(255,255,255,0.97); border: 1.5px solid var(--border);
+            border-radius: 14px; padding: 0.9rem 1.3rem;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+        }
+
+        .idx-about__badge strong {
+            font-size: 2.3rem; font-weight: 800;
+            color: var(--accent); display: block; line-height: 1; letter-spacing: -0.02em;
+        }
+
+        .idx-about__badge span { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+
+        .idx-about__copy h2 {
+            font-size: clamp(2rem, 3.2vw, 2.8rem);
+            font-weight: 800; color: #111827; line-height: 1.1; margin: 0.5rem 0 1rem; letter-spacing: -0.02em;
+        }
+
+        .idx-about__copy > p { color: var(--muted); font-size: 0.97rem; line-height: 1.7; margin-bottom: 2rem; font-weight: 500; }
+
+        .idx-pillars { display: flex; flex-direction: column; gap: 0.8rem; }
+
+        .idx-pillar {
+            display: flex; align-items: flex-start; gap: 0.9rem;
+            padding: 1rem 1.1rem; background: var(--surface);
+            border: 1.5px solid var(--border); border-radius: 12px;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .idx-pillar:hover { border-color: var(--accent-border); transform: translateX(5px); box-shadow: 0 4px 16px rgba(79,70,229,0.07); }
+
+        .idx-pillar__icon {
+            flex-shrink: 0; width: 38px; height: 38px;
+            background: var(--accent-light); border-radius: 10px;
+            display: grid; place-items: center; color: var(--accent);
+        }
+
+        .idx-pillar div strong { display: block; font-weight: 800; font-size: 0.92rem; color: #111827; margin-bottom: 0.2rem; }
+        .idx-pillar div span { font-size: 0.83rem; color: var(--muted); line-height: 1.4; font-weight: 500; }
+
+        /* ══ TESTIMONIALS ══ */
+        .idx-testi { background: var(--bg); }
+        .idx-testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.3rem; }
+
+        .idx-testi-card {
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-radius: 18px; padding: 1.6rem;
+            transition: border-color 0.2s, transform 0.25s, box-shadow 0.25s;
+        }
+        .idx-testi-card:hover { border-color: var(--accent-border); transform: translateY(-5px); box-shadow: 0 14px 36px rgba(79,70,229,0.09); }
+
+        .idx-testi-stars { font-size: 1rem; letter-spacing: 0.08em; margin-bottom: 1rem; color: #f59e0b; }
+
+        .idx-testi-card > p {
+            color: #374151; font-size: 0.94rem; line-height: 1.68;
+            font-style: italic; margin-bottom: 1.4rem; min-height: 80px; font-weight: 500;
+        }
+
+        .idx-testi-author { display: flex; align-items: center; gap: 0.75rem; }
+
+        .idx-testi-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--grad2); color: #fff; font-weight: 800; font-size: 0.8rem;
+            display: grid; place-items: center; flex-shrink: 0;
+        }
+
+        .idx-testi-author strong { display: block; font-weight: 800; font-size: 0.92rem; color: #111827; }
+        .idx-testi-author span { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+        /* ══ FOOTER ══ */
+        .idx-footer { background: #111827; border-top: 1.5px solid #1f2937; padding: 3.5rem 5vw 2.5rem; }
+        .idx-footer__inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.7fr; gap: 2.5rem; max-width: 1300px; margin: 0 auto; }
+
+        .idx-footer__logo { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem; }
+
+        .idx-footer__logo-icon {
+            width: 38px; height: 38px; background: linear-gradient(135deg,#4f46e5,#7c3aed);
+            border-radius: 10px; display: grid; place-items: center;
+            box-shadow: 0 4px 16px rgba(79,70,229,0.3); flex-shrink: 0;
+        }
+
+        .idx-footer__logo-text { font-size: 1.3rem; font-weight: 800; color: #f9fafb; letter-spacing: -0.01em; }
+
+        .idx-footer__brand > p { color: #9ca3af; font-size: 0.9rem; line-height: 1.65; margin-bottom: 1.2rem; max-width: 260px; font-weight: 500; }
+        .idx-footer__copy { font-size: 0.82rem; color: #4b5563; font-weight: 500; }
+        .idx-footer__copy a { color: #6b7280; text-decoration: none; }
+        .idx-footer__copy a:hover { color: #9ca3af; }
+
+        .idx-footer__col h5 { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #f9fafb; margin-bottom: 1rem; }
+        .idx-footer__col a { display: block; color: #9ca3af; text-decoration: none; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.55rem; transition: color 0.18s; }
+        .idx-footer__col a:hover { color: #e5e7eb; }
+
+        .idx-contact-items { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 0.75rem; }
+
+        .idx-contact-item {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            padding: 0.65rem 0.8rem;
+            background: rgba(255,255,255,0.04); border: 1px solid #1f2937;
+            border-radius: 11px; text-decoration: none;
+            transition: background 0.18s, border-color 0.18s;
+        }
+
+        a.idx-contact-item:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); }
+
+        .idx-contact-item__icon {
+            width: 30px; height: 30px;
+            background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 8px; display: grid; place-items: center;
+            color: #a5b4fc; flex-shrink: 0; margin-top: 1px;
+        }
+
+        .idx-contact-item__body span {
+            display: block; font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.09em; color: #6b7280; font-weight: 700; margin-bottom: 0.15rem;
+        }
+
+        .idx-contact-item__body strong { display: block; font-size: 0.83rem; color: #e2e8f0; font-weight: 700; line-height: 1.4; }
+
+        .idx-co-strip {
+            display: flex; align-items: stretch;
+            background: rgba(255,255,255,0.03); border: 1px solid #1f2937;
+            border-radius: 11px; overflow: hidden;
+        }
+
+        .idx-co-strip__item { flex: 1; padding: 0.6rem 0.5rem; text-align: center; }
+        .idx-co-strip__item span { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: #4b5563; font-weight: 700; margin-bottom: 0.2rem; }
+        .idx-co-strip__item strong { font-size: 0.8rem; color: #cbd5e1; font-weight: 800; display: block; }
+        .idx-co-strip__sep { width: 1px; background: #1f2937; flex-shrink: 0; align-self: stretch; }
+
+        .idx-co-active { display: inline-flex !important; align-items: center; justify-content: center; gap: 0.3rem; color: #34d399 !important; }
+
+        .idx-co-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: #34d399; box-shadow: 0 0 0 3px rgba(52,211,153,0.2);
+            animation: dotPulse 2s ease infinite; flex-shrink: 0;
+        }
+
+        /* ── Reveal ── */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.in { opacity: 1; transform: translateY(0); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1200px) { .idx-car-grid { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 900px) {
+            .mh-nav__links, .mh-nav__right { display: none; }
+            .mh-nav__toggle { display: flex; }
+            .idx-hero { min-height: auto; padding-top: 3rem; }
+            .idx-hero__inner { padding: 0 1.5rem 4.5rem; }
+            .idx-floats { display: none; }
+            .idx-about__grid { grid-template-columns: 1fr; }
+            .idx-about__visual { height: 300px; }
+            .idx-testi-grid { grid-template-columns: 1fr; }
+            .idx-footer__inner { grid-template-columns: 1fr 1fr; }
+            .idx-footer__col--contact { grid-column: 1 / -1; }
+            .idx-hero__cut { height: 55px; }
+        }
+        @media (max-width: 640px) {
+            .idx-car-grid { grid-template-columns: 1fr; }
+            .idx-footer__inner { grid-template-columns: 1fr; }
+            .idx-stats { gap: 1.2rem; }
+            .idx-stat-sep { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ Navbar ══ -->
+<nav class="mh-nav" id="mhNav">
+    <div class="mh-nav__inner">
+        <a class="mh-brand" href="index.html" aria-label="Motors Hut Home">
+            <div class="mh-brand__icon">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 14.5V16a1 1 0 0 0 1 1h1a2 2 0 1 0 4 0h4a2 2 0 1 0 4 0h1a1 1 0 0 0 1-1v-1.5l-1.2-4.1A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.4L4 14.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                    <path d="M7.5 9 9 6.8A1.5 1.5 0 0 1 10.2 6h3.6A1.5 1.5 0 0 1 15 6.8L16.5 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    <circle cx="8" cy="17" r="1.2" fill="currentColor"/>
+                    <circle cx="16" cy="17" r="1.2" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="mh-brand__text">Motors Hut</span>
+        </a>
+
+        <ul class="mh-nav__links">
+            <li><a class="mh-nav__link active" href="index.html">Home</a></li>
+            <li><a class="mh-nav__link" href="#featured">Cars</a></li>
+            <li><a class="mh-nav__link" href="#featured">Browse Cars</a></li>
+            <li><a class="mh-nav__link" href="#about">About</a></li>
+            <li><a class="mh-nav__link" href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="mh-nav__right">
+            <a class="mh-nav__pill" href="login.html">Sign In</a>
+        </div>
+
+        <button class="mh-nav__toggle" id="mhToggle" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mh-nav__drawer" id="mhDrawer">
+    <a class="mh-nav__link" href="index.html">Home</a>
+    <a class="mh-nav__link" href="#featured">Cars</a>
+    <a class="mh-nav__link" href="#featured">Browse Cars</a>
+    <a class="mh-nav__link" href="#about">About</a>
+    <a class="mh-nav__link" href="#contact">Contact</a>
+    <div class="mh-nav__drawer-btns">
+        <a class="mh-nav__pill" href="login.html">Sign In</a>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════ -->
+<section class="idx-hero" id="home">
+    <div class="idx-hero__bg"></div>
+    <div class="idx-hero__vignette"></div>
+
+    <div class="idx-hero__inner">
+        <div class="idx-chip">
+            <span class="idx-chip__dot"></span>
+            2026 Collection Live
+        </div>
+        <h1 class="idx-hero__h1">
+            Where<br>
+            <em>Performance</em><br>
+            Meets Personality
+        </h1>
+        <p class="idx-hero__sub">Curated luxury, electric, sport, and family cars — verified history, instant financing, and trusted sellers.</p>
+        <div class="idx-hero__btns">
+            <a href="#featured" class="idx-btn idx-btn--primary">
+                Explore Cars
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#about" class="idx-btn idx-btn--ghost">How It Works</a>
+        </div>
+
+        <div class="idx-stats">
+            <div class="idx-stat">
+                <strong class="idx-counter" data-target="2200">0</strong>
+                <span>Verified Listings</span>
+            </div>
+            <div class="idx-stat-sep"></div>
+            <div class="idx-stat">
+                <strong class="idx-counter" data-target="1750">0</strong>
+                <span>Cars Sold</span>
+            </div>
+            <div class="idx-stat-sep"></div>
+            <div class="idx-stat">
+                <strong class="idx-counter" data-target="98">0</strong>
+                <span>% Satisfaction</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="idx-floats">
+        <div class="idx-float">⚡ EV Deals from $19,999</div>
+        <div class="idx-float">🏦 Same-Day Financing</div>
+        <div class="idx-float">📋 Free Vehicle History</div>
+    </div>
+
+    <div class="idx-hero__cut"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TRUST MARQUEE
+════════════════════════════════════════════════════ -->
+<div class="idx-marquee-wrap">
+    <div class="idx-marquee">
+        <span>Verified Sellers</span><span class="idx-sep">✦</span>
+        <span>Transparent Pricing</span><span class="idx-sep">✦</span>
+        <span>Instant Financing</span><span class="idx-sep">✦</span>
+        <span>Free History Reports</span><span class="idx-sep">✦</span>
+        <span>48,000+ Listings</span><span class="idx-sep">✦</span>
+        <span>5-Star Rated Service</span><span class="idx-sep">✦</span>
+        <span>Verified Sellers</span><span class="idx-sep">✦</span>
+        <span>Transparent Pricing</span><span class="idx-sep">✦</span>
+        <span>Instant Financing</span><span class="idx-sep">✦</span>
+        <span>Free History Reports</span><span class="idx-sep">✦</span>
+        <span>48,000+ Listings</span><span class="idx-sep">✦</span>
+        <span>5-Star Rated Service</span><span class="idx-sep">✦</span>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FEATURED CARS
+════════════════════════════════════════════════════ -->
+<section id="featured" class="idx-section">
+    <div class="idx-section__inner">
+        <div class="idx-section__head reveal">
+            <div class="idx-label">Featured Inventory</div>
+            <h2>Cars That Turn Heads</h2>
+            <p>Hand-picked from verified dealers and private sellers across the country.</p>
+        </div>
+
+        <div class="idx-car-grid">
+            <article class="idx-car reveal">
+                <div class="idx-car__img-wrap">
+                    <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=900&q=80" alt="Orange sports car" loading="lazy"/>
+                    <div class="idx-car__badge">Hot Deal</div>
+                    <div class="idx-car__overlay"><a href="#" class="idx-car__view">View Details →</a></div>
+                </div>
+                <div class="idx-car__body">
+                    <div class="idx-car__tags"><span>Petrol</span><span>Auto</span><span>12k mi</span></div>
+                    <h3>Apex GT Turbo</h3>
+                    <p>420hp performance coupe with track mode and adaptive suspension.</p>
+                    <div class="idx-car__footer">
+                        <strong class="idx-car__price">$54,900</strong>
+                        <a href="#contact" class="idx-car__cta">Enquire</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="idx-car reveal">
+                <div class="idx-car__img-wrap">
+                    <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=900&q=80" alt="Blue electric car" loading="lazy"/>
+                    <div class="idx-car__badge idx-car__badge--ev">EV</div>
+                    <div class="idx-car__overlay"><a href="#" class="idx-car__view">View Details →</a></div>
+                </div>
+                <div class="idx-car__body">
+                    <div class="idx-car__tags"><span class="ev">Electric</span><span>Auto</span><span>8k mi</span></div>
+                    <h3>Volterra E-Line</h3>
+                    <p>Long-range EV with autonomous assist and ultra-fast charging.</p>
+                    <div class="idx-car__footer">
+                        <strong class="idx-car__price">$47,300</strong>
+                        <a href="#contact" class="idx-car__cta">Enquire</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="idx-car reveal">
+                <div class="idx-car__img-wrap">
+                    <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=900&q=80" alt="Black SUV" loading="lazy"/>
+                    <div class="idx-car__overlay"><a href="#" class="idx-car__view">View Details →</a></div>
+                </div>
+                <div class="idx-car__body">
+                    <div class="idx-car__tags"><span>Hybrid</span><span>Auto</span><span>17k mi</span></div>
+                    <h3>UrbanX 7 Seater</h3>
+                    <p>Premium family SUV with panoramic roof and 360 safety suite.</p>
+                    <div class="idx-car__footer">
+                        <strong class="idx-car__price">$39,800</strong>
+                        <a href="#contact" class="idx-car__cta">Enquire</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="idx-car reveal">
+                <div class="idx-car__img-wrap">
+                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=900&q=80" alt="Silver sedan" loading="lazy"/>
+                    <div class="idx-car__overlay"><a href="#" class="idx-car__view">View Details →</a></div>
+                </div>
+                <div class="idx-car__body">
+                    <div class="idx-car__tags"><span>Diesel</span><span>Auto</span><span>10k mi</span></div>
+                    <h3>Executive S-Class</h3>
+                    <p>Elegant comfort sedan with premium interior and smart cockpit.</p>
+                    <div class="idx-car__footer">
+                        <strong class="idx-car__price">$43,600</strong>
+                        <a href="#contact" class="idx-car__cta">Enquire</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="idx-see-all reveal">
+            <a href="#featured" class="idx-btn idx-btn--outline">Browse All Listings</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     ABOUT
+════════════════════════════════════════════════════ -->
+<section id="about" class="idx-section idx-about">
+    <div class="idx-section__inner">
+        <div class="idx-about__grid">
+            <div class="idx-about__visual reveal">
+                <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80" alt="Car interior" loading="lazy"/>
+                <div class="idx-about__badge">
+                    <strong>10+</strong>
+                    <span>Years of Trust</span>
+                </div>
+            </div>
+
+            <div class="idx-about__copy reveal">
+                <div class="idx-label">About Motors Hut</div>
+                <h2>Built For Buyers Who Want More Than Just A Car</h2>
+                <p>Motors Hut is a next-generation marketplace where people discover, compare, and close deals faster. We blend trust, tech, and premium support to simplify every step from first click to final key handover.</p>
+                <div class="idx-pillars">
+                    <div class="idx-pillar">
+                        <div class="idx-pillar__icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/></svg>
+                        </div>
+                        <div><strong>Verified Listings</strong><span>Every dealer and private seller is vetted before listing</span></div>
+                    </div>
+                    <div class="idx-pillar">
+                        <div class="idx-pillar__icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+                        </div>
+                        <div><strong>Transparent Pricing</strong><span>No hidden fees, no nasty surprises at the finish line</span></div>
+                    </div>
+                    <div class="idx-pillar">
+                        <div class="idx-pillar__icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div><strong>Instant Financing</strong><span>Integrated insurance and financing support on every deal</span></div>
+                    </div>
+                    <div class="idx-pillar">
+                        <div class="idx-pillar__icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                        </div>
+                        <div><strong>Free History Reports</strong><span>Real-time inventory updates with full vehicle history</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════════════════ -->
+<section id="feedback" class="idx-section idx-testi">
+    <div class="idx-section__inner">
+        <div class="idx-section__head reveal">
+            <div class="idx-label">Customer Feedback</div>
+            <h2>What Drivers Say</h2>
+        </div>
+        <div class="idx-testi-grid">
+            <article class="idx-testi-card reveal">
+                <div class="idx-testi-stars">★★★★★</div>
+                <p>"Smoothest car buying experience I have ever had. Transparent, fast and super premium service."</p>
+                <div class="idx-testi-author">
+                    <div class="idx-testi-avatar">RA</div>
+                    <div><strong>R. Ahmed</strong><span>Purchased Volterra E-Line</span></div>
+                </div>
+            </article>
+            <article class="idx-testi-card reveal">
+                <div class="idx-testi-stars">★★★★★</div>
+                <p>"I sold my SUV in 3 days. The listing tools and lead quality are absolutely excellent."</p>
+                <div class="idx-testi-author">
+                    <div class="idx-testi-avatar">NK</div>
+                    <div><strong>N. Khan</strong><span>Verified Seller</span></div>
+                </div>
+            </article>
+            <article class="idx-testi-card reveal">
+                <div class="idx-testi-stars">★★★★★</div>
+                <p>"Motors Hut's support team helped me compare options and close financing incredibly quickly."</p>
+                <div class="idx-testi-author">
+                    <div class="idx-testi-avatar">JS</div>
+                    <div><strong>J. Smith</strong><span>Purchased Apex GT Turbo</span></div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER / CONTACT
+════════════════════════════════════════════════════ -->
+<footer id="contact" class="idx-footer">
+    <div class="idx-footer__inner">
+        <div class="idx-footer__brand">
+            <div class="idx-footer__logo">
+                <div class="idx-footer__logo-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:#fff">
+                        <path d="M4 14.5V16a1 1 0 0 0 1 1h1a2 2 0 1 0 4 0h4a2 2 0 1 0 4 0h1a1 1 0 0 0 1-1v-1.5l-1.2-4.1A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.4L4 14.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                        <path d="M7.5 9 9 6.8A1.5 1.5 0 0 1 10.2 6h3.6A1.5 1.5 0 0 1 15 6.8L16.5 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        <circle cx="8" cy="17" r="1.2" fill="currentColor"/>
+                        <circle cx="16" cy="17" r="1.2" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="idx-footer__logo-text">Motors Hut</span>
+            </div>
+            <p>The modern destination for buying and selling premium cars with confidence and clarity.</p>
+            <div class="idx-footer__copy">&copy; 2026 Motors Hut &mdash; <a href="#">Privacy</a></div>
+        </div>
+
+        <div class="idx-footer__col">
+            <h5>Explore</h5>
+            <a href="#featured">Inventory</a>
+            <a href="#">Sell Your Car</a>
+            <a href="#">Financing</a>
+            <a href="#">Car Valuation</a>
+        </div>
+
+        <div class="idx-footer__col">
+            <h5>Company</h5>
+            <a href="#about">About Us</a>
+            <a href="#">Support</a>
+            <a href="#contact">Contact</a>
+            <a href="#">Careers</a>
+        </div>
+
+        <div class="idx-footer__col idx-footer__col--contact">
+            <h5>Contact &amp; Legal</h5>
+            <div class="idx-contact-items">
+                <a class="idx-contact-item" href="mailto:info@motorshut.com">
+                    <div class="idx-contact-item__icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <div class="idx-contact-item__body">
+                        <span>Email us</span>
+                        <strong>info@motorshut.com</strong>
+                    </div>
+                </a>
+                <a class="idx-contact-item" href="tel:07456673709">
+                    <div class="idx-contact-item__icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </div>
+                    <div class="idx-contact-item__body">
+                        <span>Call us</span>
+                        <strong>07456 673 709</strong>
+                    </div>
+                </a>
+                <div class="idx-contact-item idx-contact-item--addr">
+                    <div class="idx-contact-item__icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div class="idx-contact-item__body">
+                        <span>Registered office</span>
+                        <strong>13 Oliver Road, Rainham,<br>England, RM13 71-JH</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="idx-co-strip">
+                <div class="idx-co-strip__item">
+                    <span>Company No.</span>
+                    <strong>16614536</strong>
+                </div>
+                <div class="idx-co-strip__sep"></div>
+                <div class="idx-co-strip__item">
+                    <span>Type</span>
+                    <strong>Ltd.</strong>
+                </div>
+                <div class="idx-co-strip__sep"></div>
+                <div class="idx-co-strip__item">
+                    <span>Status</span>
+                    <strong class="idx-co-active">
+                        <span class="idx-co-dot"></span>Active
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar toggle
+    const toggle = document.getElementById('mhToggle');
+    const drawer = document.getElementById('mhDrawer');
+    toggle?.addEventListener('click', () => {
+        drawer.classList.toggle('open');
+        const bars   = toggle.querySelectorAll('span');
+        const isOpen = drawer.classList.contains('open');
+        bars[0].style.transform = isOpen ? 'translateY(7px) rotate(45deg)'  : '';
+        bars[1].style.opacity   = isOpen ? '0' : '';
+        bars[2].style.transform = isOpen ? 'translateY(-7px) rotate(-45deg)' : '';
+    });
+
+    // Scroll shadow
+    const nav = document.getElementById('mhNav');
+    window.addEventListener('scroll', () => {
+        nav.style.boxShadow = window.scrollY > 20
+            ? '0 4px 24px rgba(0,0,0,0.1)'
+            : '0 1px 12px rgba(0,0,0,0.06)';
+    }, { passive: true });
+
+    // Counters
+    document.querySelectorAll('.idx-counter').forEach(el => {
+        const target = Number(el.dataset.target || 0);
+        let val = 0;
+        const step = Math.max(1, Math.ceil(target / 70));
+        const t = setInterval(() => {
+            val = Math.min(val + step, target);
+            el.textContent = val.toLocaleString();
+            if (val >= target) clearInterval(t);
+        }, 20);
+    });
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

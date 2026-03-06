@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In — Motors Hut</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --indigo-950: #0f0d2e;
+            --indigo-900: #1e1b4b;
+            --indigo-800: #312e81;
+            --indigo-700: #3730a3;
+            --indigo-600: #4338ca;
+            --indigo-500: #4f46e5;
+            --indigo-400: #6366f1;
+            --indigo-300: #818cf8;
+            --indigo-200: #a5b4fc;
+            --indigo-100: #c7d2fe;
+            --indigo-50:  #e0e7ff;
+            --violet-500: #7c3aed;
+            --surface:    #ffffff;
+            --bg:         #f5f7ff;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* ── SHELL ── */
+        .lx-shell {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100vh;
+            min-height: 600px;
+        }
+
+        /* ══ LEFT — SHOWCASE ══ */
+        .lx-showcase {
+            position: relative;
+            overflow: hidden;
+            background: var(--indigo-900);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2.6rem 3rem;
+        }
+
+        .lx-showcase::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 20%, rgba(124,58,237,0.45) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 80% at 85% 75%, rgba(67,56,202,0.55) 0%, transparent 55%),
+                radial-gradient(ellipse 100% 60% at 50% 110%, rgba(30,27,75,0.9) 0%, transparent 60%),
+                linear-gradient(160deg, #0f0d2e 0%, #1e1b4b 40%, #2d2a7a 100%);
+            pointer-events: none;
+        }
+
+        .lx-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            animation: orbFloat 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .lx-orb--1 { width: 320px; height: 320px; background: radial-gradient(circle, #7c3aed, #4338ca); top: -80px; left: -60px; animation-delay: 0s; }
+        .lx-orb--2 { width: 240px; height: 240px; background: radial-gradient(circle, #a5b4fc, #6366f1); bottom: 80px; right: -40px; animation-delay: -3.5s; opacity: 0.25; }
+        .lx-orb--3 { width: 180px; height: 180px; background: radial-gradient(circle, #c7d2fe, #818cf8); top: 45%; left: 55%; animation-delay: -6s; opacity: 0.18; }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20px, -20px) scale(1.05); }
+            66% { transform: translate(-15px, 15px) scale(0.95); }
+        }
+
+        .lx-grid-overlay {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .lx-showcase > *:not(.lx-orb):not(.lx-grid-overlay) { position: relative; z-index: 2; }
+
+        .lx-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+
+        .lx-brand__icon {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.22);
+            border-radius: 11px; display: grid; place-items: center;
+            color: #c7d2fe;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+
+        .lx-brand__name { font-size: 1.15rem; font-weight: 800; color: #ffffff; letter-spacing: 0.01em; }
+
+        .lx-brand__dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #a5b4fc; box-shadow: 0 0 0 3px rgba(165,180,252,0.25);
+            animation: pulse 2.4s ease infinite;
+            display: inline-block; margin-left: 0.3rem; vertical-align: middle;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(165,180,252,0.25); }
+            50% { box-shadow: 0 0 0 7px rgba(165,180,252,0.06); }
+        }
+
+        .lx-hero { margin-top: auto; margin-bottom: auto; padding: 1.5rem 0; }
+
+        .lx-hero__badge {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.32rem 0.8rem; border-radius: 99px;
+            border: 1px solid rgba(167,139,250,0.35);
+            background: rgba(167,139,250,0.12);
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+            text-transform: uppercase; color: #c4b5fd; margin-bottom: 1.4rem;
+        }
+
+        .lx-hero__title {
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+            line-height: 1.05; letter-spacing: -0.025em;
+            color: #ffffff; margin-bottom: 1rem;
+        }
+
+        .lx-hero__title em {
+            font-style: normal;
+            background: linear-gradient(135deg, #c7d2fe, #a5b4fc, #e9d5ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .lx-hero__desc {
+            color: rgba(199,210,254,0.75); font-size: 0.95rem; line-height: 1.65;
+            max-width: 32ch; margin-bottom: 2rem; font-weight: 500;
+        }
+
+        .lx-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.65rem; }
+
+        .lx-stat {
+            padding: 0.9rem 1rem;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; backdrop-filter: blur(8px);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .lx-stat:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.18); }
+
+        .lx-stat__val { display: block; font-size: 1.3rem; font-weight: 900; color: #ffffff; line-height: 1.1; letter-spacing: -0.02em; }
+        .lx-stat__key { display: block; margin-top: 0.22rem; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo-200); }
+
+        .lx-trust {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 0.85rem; border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 10px; background: rgba(255,255,255,0.05);
+            color: var(--indigo-100); font-size: 0.81rem; font-weight: 600;
+            backdrop-filter: blur(6px);
+        }
+        .lx-trust svg { opacity: 0.8; flex-shrink: 0; }
+
+        /* ══ RIGHT — FORM PANEL ══ */
+        .lx-panel {
+            background: var(--surface);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 2.5rem 2rem; overflow-y: auto; position: relative;
+        }
+
+        .lx-panel::before {
+            content: '';
+            position: absolute; top: 0; left: 10%; right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--indigo-300), transparent);
+            border-radius: 99px;
+        }
+
+        .lx-panel::after {
+            content: '';
+            position: absolute; top: -100px; right: -100px;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .lx-form-wrap {
+            width: 100%; max-width: 390px;
+            position: relative; z-index: 1;
+            animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .lx-form-head { margin-bottom: 2rem; }
+
+        .lx-form-head__logo { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+
+        .lx-form-head__logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--indigo-700), var(--indigo-500));
+            border-radius: 10px; display: grid; place-items: center;
+            color: #fff; box-shadow: 0 4px 12px rgba(67,56,202,0.3);
+        }
+
+        .lx-form-head__logo-name { font-size: 1rem; font-weight: 800; color: var(--indigo-900); letter-spacing: 0.01em; }
+        .lx-form-head__logo-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo-400); display: block; }
+
+        .lx-form-head__title { font-size: 1.85rem; font-weight: 900; color: var(--indigo-900); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 0.35rem; }
+        .lx-form-head__sub { color: var(--indigo-300); font-size: 0.88rem; font-weight: 600; }
+
+        /* Alert */
+        .lx-alert {
+            background: #fef2f2; border: 1.5px solid #fecaca;
+            border-radius: 10px; color: #b91c1c;
+            font-size: 0.83rem; font-weight: 600;
+            padding: 0.7rem 0.9rem; margin-bottom: 1.2rem;
+            display: none; align-items: center; gap: 0.5rem;
+        }
+        .lx-alert.visible { display: flex; }
+
+        /* Fields */
+        .lx-form { display: flex; flex-direction: column; gap: 1.05rem; }
+        .lx-field { display: flex; flex-direction: column; gap: 0.42rem; }
+
+        .lx-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--indigo-700); }
+
+        .lx-input-wrap { position: relative; }
+
+        .lx-input-icon {
+            position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%);
+            color: var(--indigo-200); pointer-events: none; transition: color 0.18s;
+        }
+
+        .lx-input {
+            width: 100%; height: 46px;
+            background: var(--bg); border: 1.5px solid var(--indigo-50);
+            border-radius: 11px; padding: 0 1rem 0 2.65rem;
+            color: var(--indigo-900); font-family: 'Nunito', sans-serif;
+            font-size: 0.93rem; font-weight: 600; outline: none; transition: all 0.18s;
+        }
+
+        .lx-input::placeholder { color: var(--indigo-200); font-weight: 500; }
+        .lx-input:hover { border-color: var(--indigo-100); }
+        .lx-input:focus { border-color: var(--indigo-400); background: #ffffff; box-shadow: 0 0 0 3.5px rgba(99,102,241,0.14); }
+        .lx-input-wrap:focus-within .lx-input-icon { color: var(--indigo-500); }
+
+        .lx-pw-toggle {
+            position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--indigo-300);
+            cursor: pointer; display: flex; align-items: center;
+            padding: 4px; border-radius: 6px; transition: color 0.18s, background 0.18s;
+        }
+        .lx-pw-toggle:hover { color: var(--indigo-500); background: var(--indigo-50); }
+        .lx-input--pw { padding-right: 2.8rem; }
+
+        .lx-row { display: flex; align-items: center; justify-content: space-between; margin-top: -0.1rem; }
+
+        .lx-forgot { font-size: 0.82rem; font-weight: 700; color: var(--indigo-500); text-decoration: none; transition: color 0.18s; }
+        .lx-forgot:hover { color: var(--indigo-700); text-decoration: underline; }
+
+        /* Submit */
+        .lx-btn {
+            height: 48px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, var(--indigo-700) 0%, var(--indigo-500) 50%, var(--violet-500) 100%);
+            color: #ffffff;
+            display: flex; justify-content: center; align-items: center; gap: 0.55rem;
+            font-family: 'Nunito', sans-serif; font-size: 0.93rem; font-weight: 800;
+            letter-spacing: 0.03em; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(67,56,202,0.3), 0 1px 0 rgba(255,255,255,0.15) inset;
+            transition: transform 0.17s, filter 0.2s, box-shadow 0.2s;
+            margin-top: 0.3rem; position: relative; overflow: hidden; width: 100%;
+        }
+
+        .lx-btn::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 60%);
+            border-radius: inherit; pointer-events: none;
+        }
+
+        .lx-btn:hover { transform: translateY(-2px); filter: brightness(1.07); box-shadow: 0 12px 28px rgba(67,56,202,0.38); }
+        .lx-btn:active { transform: translateY(0); filter: brightness(0.98); }
+        .lx-btn svg { transition: transform 0.2s; flex-shrink: 0; }
+        .lx-btn:hover svg { transform: translateX(3px); }
+
+        /* Divider */
+        .lx-divider {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin: 1.5rem 0; font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo-200);
+        }
+        .lx-divider::before, .lx-divider::after { content: ''; flex: 1; height: 1.5px; background: var(--indigo-50); border-radius: 99px; }
+
+        /* Back link */
+        .lx-back {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.82rem; font-weight: 700; color: var(--indigo-400);
+            text-decoration: none; margin-bottom: 1.5rem;
+            transition: color 0.18s;
+        }
+        .lx-back:hover { color: var(--indigo-600); }
+
+        .lx-footer-note {
+            text-align: center; margin-top: 1.6rem;
+            font-size: 0.8rem; color: var(--indigo-300); font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+        }
+        .lx-footer-note svg { opacity: 0.7; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            html, body { overflow: auto; }
+            .lx-shell { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
+            .lx-showcase { padding: 2rem 1.6rem; min-height: auto; }
+            .lx-hero { padding: 0; }
+            .lx-panel { padding: 2.5rem 1.5rem; }
+            .lx-panel::before { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .lx-stats { grid-template-columns: repeat(3,1fr); gap: 0.4rem; }
+            .lx-stat { padding: 0.65rem 0.6rem; }
+            .lx-stat__val { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lx-shell">
+
+    <!-- ══ LEFT: SHOWCASE ══ -->
+    <section class="lx-showcase" aria-hidden="true">
+        <div class="lx-orb lx-orb--1"></div>
+        <div class="lx-orb lx-orb--2"></div>
+        <div class="lx-orb lx-orb--3"></div>
+        <div class="lx-grid-overlay"></div>
+
+        <a class="lx-brand" href="index.html">
+            <div class="lx-brand__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 14.5V16a1 1 0 0 0 1 1h1a2 2 0 1 0 4 0h4a2 2 0 1 0 4 0h1a1 1 0 0 0 1-1v-1.5l-1.2-4.1A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.4L4 14.5Z"/>
+                    <path d="M7.5 9 9 6.8A1.5 1.5 0 0 1 10.2 6h3.6A1.5 1.5 0 0 1 15 6.8L16.5 9"/>
+                </svg>
+            </div>
+            <span class="lx-brand__name">Motors Hut <span class="lx-brand__dot"></span></span>
+        </a>
+
+        <div class="lx-hero">
+            <div class="lx-hero__badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+                Secure Admin Access
+            </div>
+            <h1 class="lx-hero__title">
+                Welcome Back<br>to <em>Motors Hut</em>
+            </h1>
+            <p class="lx-hero__desc">
+                Manage listings, track leads, and keep your inventory moving — all from one powerful dashboard.
+            </p>
+            <div class="lx-stats">
+                <div class="lx-stat">
+                    <span class="lx-stat__val">48K+</span>
+                    <span class="lx-stat__key">Listings</span>
+                </div>
+                <div class="lx-stat">
+                    <span class="lx-stat__val">99%</span>
+                    <span class="lx-stat__key">Verified</span>
+                </div>
+                <div class="lx-stat">
+                    <span class="lx-stat__val">24/7</span>
+                    <span class="lx-stat__key">Uptime</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="lx-trust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Trusted by premium buyers &amp; sellers nationwide
+        </div>
+    </section>
+
+    <!-- ══ RIGHT: FORM ══ -->
+    <section class="lx-panel">
+        <div class="lx-form-wrap">
+
+            <a class="lx-back" href="index.html">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Motors Hut
+            </a>
+
+            <div class="lx-form-head">
+                <div class="lx-form-head__logo">
+                    <div class="lx-form-head__logo-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 14.5V16a1 1 0 0 0 1 1h1a2 2 0 1 0 4 0h4a2 2 0 1 0 4 0h1a1 1 0 0 0 1-1v-1.5l-1.2-4.1A2 2 0 0 0 16.9 9H7.1a2 2 0 0 0-1.9 1.4L4 14.5Z"/>
+                            <path d="M7.5 9 9 6.8A1.5 1.5 0 0 1 10.2 6h3.6A1.5 1.5 0 0 1 15 6.8L16.5 9"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="lx-form-head__logo-name">Motors Hut</span>
+                        <span class="lx-form-head__logo-tag">Admin Panel</span>
+                    </div>
+                </div>
+                <h2 class="lx-form-head__title">Sign in</h2>
+                <p class="lx-form-head__sub">Enter your credentials to continue.</p>
+            </div>
+
+            <div class="lx-alert" id="lxAlert">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="lxAlertMsg">Invalid email or password.</span>
+            </div>
+
+            <form class="lx-form" id="lxForm" novalidate>
+
+                <!-- Email -->
+                <div class="lx-field">
+                    <label class="lx-label" for="Email">Email Address</label>
+                    <div class="lx-input-wrap">
+                        <svg class="lx-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9l10 6 10-6"/>
+                        </svg>
+                        <input id="Email" name="Email" type="email" class="lx-input" placeholder="name@example.com" autocomplete="email" required />
+                    </div>
+                    <span class="lx-error" id="emailError" style="font-size:0.76rem;color:#dc2626;font-weight:600;display:none;"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="lx-field">
+                    <label class="lx-label" for="Password">Password</label>
+                    <div class="lx-input-wrap">
+                        <svg class="lx-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <input id="Password" name="Password" type="password" class="lx-input lx-input--pw"
+                               placeholder="Enter your password" autocomplete="current-password" required />
+                        <button type="button" class="lx-pw-toggle" aria-label="Toggle password" onclick="toggleLxPw(this)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="lx-error" id="pwError" style="font-size:0.76rem;color:#dc2626;font-weight:600;display:none;"></span>
+                </div>
+
+                <!-- Forgot -->
+                <div class="lx-row">
+                    <a href="#" class="lx-forgot">Forgot password?</a>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="lx-btn">
+                    <span>Sign In to Dashboard</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+            </form>
+
+            <div class="lx-divider">or</div>
+
+            <p class="lx-footer-note">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Need admin access? Contact your super admin.
+            </p>
+
+        </div>
+    </section>
+
+</div>
+
+<script>
+    function toggleLxPw(btn) {
+        const input = btn.closest('.lx-input-wrap').querySelector('input');
+        const isText = input.type === 'text';
+        input.type = isText ? 'password' : 'text';
+        btn.innerHTML = isText
+            ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+            : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+    }
+
+    // Client-side validation (form is static — no server)
+    document.getElementById('lxForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('Email').value.trim();
+        const pass  = document.getElementById('Password').value;
+        const emailErr = document.getElementById('emailError');
+        const pwErr    = document.getElementById('pwError');
+        const alert    = document.getElementById('lxAlert');
+        let valid = true;
+
+        emailErr.style.display = 'none';
+        pwErr.style.display    = 'none';
+        alert.classList.remove('visible');
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailErr.textContent = 'Please enter a valid email address.';
+            emailErr.style.display = 'block';
+            valid = false;
+        }
+        if (!pass || pass.length < 6) {
+            pwErr.textContent = 'Password must be at least 6 characters.';
+            pwErr.style.display = 'block';
+            valid = false;
+        }
+
+        if (valid) {
+            // Static demo — show a friendly note
+            document.getElementById('lxAlertMsg').textContent = 'This is a static demo. Backend login is not connected.';
+            alert.classList.add('visible');
+        }
+    });
+</script>
+
+</body>
+</html>
